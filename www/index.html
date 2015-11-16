@@ -17,10 +17,15 @@
     Chrome <script>document.write(process.versions.chrome)</script>,
     and Electron <script>document.write(process.versions.electron)</script>.
 
-    <table style="margin:100px 0; width:400px;">
+    <table style="margin:50px 0; width:400px;">
+      <tr ng-repeat="item in fileList track by $index">
+        <td><a href="" ng-click="start(item)">{{ item }}</a></td>
+      </tr>
+    </table>
+
+    <table style="margin:50px 0; width:400px;">
       <tr>
-        <td><a href="" ng-click="play()">Play</a></td>
-        <td><a href="" ng-click="pause()">Pause</a></td>
+        <td><a href="" ng-click="toggle()">Play/Pause</a></td>
         <td><a href="" ng-click="stop()">Stop</a></td>
       </tr>
     </table>
@@ -30,8 +35,6 @@
       <span>{{ metadata.artist }} - {{ metadata.album }}</span><br>
       <h4>{{ progress }} &nbsp;&nbsp; -- &nbsp;&nbsp; {{ duration }}</h4>
     </div>
-
-
 
   </body>
 </html>

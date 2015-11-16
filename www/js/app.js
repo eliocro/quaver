@@ -8,15 +8,34 @@ angular.module('quaver', [])
   var buffer, player;
   var fileManager = remote.require('./lib/file-manager');
 
-  fileManager.getFile('significant-other.mp3')
-  .then(function (buf) {
-    buffer = buf;
+  fileManager.listFiles()
+  .then(function (fileList) {
+    $timeout(function () {
+      $scope.fileList = fileList;
+    });
   });
 
+  $scope.start = function (fileName) {
+    $scope.stop();
+
+    $timeout(function  () {
+      fileManager.getFile(fileName)
+      .then(function (buf) {
+        buffer = buf;
+        $scope.play();
+      });
+    });
+  };
+
   $scope.play = function  () {
+    if(!player && !buffer) {
+      return;
+    }
+
+    // Create new player
     player = player || AV.Player.fromBuffer(buffer);
 
-
+    // Setup listeners
     player.on('duration', function (duration) {
       console.log('duration', arguments);
       $timeout(function () {
@@ -37,17 +56,28 @@ angular.module('quaver', [])
       });
     });
 
+    player.on('end', function () {
+      console.log('file ended');
+    });
+
+    // Start player
     player.play();
   };
 
-  $scope.pause = function  () {
-    player.pause();
+  $scope.toggle = function  () {
+    if(player) {
+      player.togglePlayback();
+    }
   };
 
   $scope.stop = function  () {
-    player.stop();
-    player = null;
+    if(player) {
+      player.stop();
+      player = null;
+    }
+
     $scope.progress = '00:00';
+    $scope.duration = '00:00';
   };
 
 
