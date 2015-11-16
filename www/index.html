@@ -11,24 +11,27 @@
 
     <script src="angular/angular.js"></script>
     <script src="js/app.js"></script>
-
-    <script>
-      var remote = require('remote');
-    </script>
   </head>
   <body ng-controller="MainCtrl">
-    <h1>Hello World!</h1>
     We are using node <script>document.write(process.versions.node)</script>,
     Chrome <script>document.write(process.versions.chrome)</script>,
     and Electron <script>document.write(process.versions.electron)</script>.
 
-    <table style="margin-top:100px; width:400px;">
+    <table style="margin:100px 0; width:400px;">
       <tr>
         <td><a href="" ng-click="play()">Play</a></td>
         <td><a href="" ng-click="pause()">Pause</a></td>
         <td><a href="" ng-click="stop()">Stop</a></td>
       </tr>
     </table>
+
+    <div>
+      <h3>{{ metadata.title }}</h3>
+      <span>{{ metadata.artist }} - {{ metadata.album }}</span><br>
+      <h4>{{ progress }} &nbsp;&nbsp; -- &nbsp;&nbsp; {{ duration }}</h4>
+    </div>
+
+
 
   </body>
 </html>
