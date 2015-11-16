@@ -1,30 +1,28 @@
+'use strict';
 
 angular.module('quaver', [])
 
 .controller('MainCtrl', function ($scope) {
-  // var player = remote.require('./lib');
-  // console.log(player);
+  var buffer, player;
+  var fileManager = remote.require('./lib/file-manager');
 
-  // var file = new File([], '/Users/elio/Sites/personal/quaver/data/normal.mp3');
-  // console.log(file);
-
-  // var player = AV.Player.fromFile(file);
-  // console.log(player);
-
+  fileManager.getFile('significant-other.mp3')
+  .then(function (buf) {
+    buffer = buf;
+  });
 
   $scope.play = function  () {
-   console.log('play');
-   player.play();
+    player = player || AV.Player.fromBuffer(buffer);
+    player.play();
   };
 
   $scope.pause = function  () {
-   console.log('pause');
-   player.pause();
+    player.pause();
   };
 
   $scope.stop = function  () {
-   console.log('stop');
-   player.stop();
+    player.stop();
+    player = null;
   };
 })
 
