@@ -5,35 +5,46 @@ var remote = require('remote');
 angular.module('quaver', [])
 
 .controller('MainCtrl', function ($scope, $timeout) {
-  var buffer, player;
+  var player;
+
   var fileManager = remote.require('./lib/file-manager');
+  var audioPlayer = remote.require('./lib/audio-player');
 
   fileManager.listFiles()
   .then(function (fileList) {
     $timeout(function () {
       $scope.fileList = fileList;
+
+      var first = fileList[0];
+      var asset = audioPlayer.getAsset(first);
+      console.log(asset);
     });
   });
 
-  $scope.start = function (fileName) {
-    $scope.stop();
 
-    $timeout(function  () {
-      fileManager.getFile(fileName)
-      .then(function (buf) {
-        buffer = buf;
-        $scope.play();
-      });
+
+  $scope.createPlayer = function (fileName) {
+    $scope.stop();
+    setTimeout(function  () {
+      // fileManager.getFile(fileName)
+      // .then(function (buffer) {
+      //   player = AV.Player.fromBuffer(buffer)
+      //   $scope.start();
+      // });
+
+      player = audioPlayer.createPlayer(fileName);
+      console.log(player);
+      $scope.start();
     });
   };
 
-  $scope.play = function  () {
-    if(!player && !buffer) {
+
+
+  // Player controls
+  $scope.start = function () {
+    if(!player) {
       return;
     }
-
-    // Create new player
-    player = player || AV.Player.fromBuffer(buffer);
 
     // Setup listeners
     player.on('duration', function (duration) {
